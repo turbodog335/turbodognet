@@ -1,11 +1,14 @@
 (() => {
   const playlist = [
+    { title: "when the moon reaches for the stars", artist: "Azumi Takahashi", src: "assets/song0.mp3" },
     { title: "New kind of love", artist: "Frou Frou", src: "assets/song.mp3" },
     { title: "для тебя", artist: "дарк бриллиант корсес", src: "assets/song2.mp3" },
     { title: "Оторву руки", artist: "Villian", src: "assets/song3.mp3" },
     { title: "Мешают спать", artist: "Villian", src: "assets/song4.mp3" },
     { title: "Bender++Girlfriend", artist: "Yung Lean", src: "assets/song5.mp3" },
    { title: "Bye.Bay", artist: "Zombiqe", src: "assets/song6.mp3" },
+    { title: "Untited junkies", artist: "Platov", src: "assets/song13.mp3" },
+    { title: "Forest", artist: "Platov", src: "assets/song12.mp3" },
     { title: "Safe Place", artist: "Sqwore", src: "assets/Safe Place.mp3" }
   ];
 
