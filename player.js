@@ -1,6 +1,6 @@
 (() => {
   const playlist = [
-    { title: "when the moon reaches for the stars", artist: "Azumi Takahashi", src: "assets/song0.mp3" },
+    { title: "When the moon reaches for the stars", artist: "Azumi Takahashi", src: "assets/song0.mp3" },
     { title: "New kind of love", artist: "Frou Frou", src: "assets/song.mp3" },
     { title: "для тебя", artist: "дарк бриллиант корсес", src: "assets/song2.mp3" },
     { title: "Оторву руки", artist: "Villian", src: "assets/song3.mp3" },
