@@ -5,12 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Фото</title>
 
-<style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=pJdS5J0ggRj6hCrz5Zy6mnhxWVlFkKM8b7eWsWu7_Xh1HUDOpzaPcDLZUU1rCq_lYteyT8K097kr7FFKueipYTPbEd2ryehRUNcp4rWclW80VEZo3jt1CLcpt-a_XYmcVVXnvtYtUZLKmDJ_iLGOtqhzTta1Ckwu4kUEBvrJSpWia_j6ecEESsI7pL0MsVN1cK677hbZGWxbtTW-yGETRQcn6UGMNxCUpn8ZC2Dn9mT_ajFifqckQ6N5tRnJScgTaKL4pv_eJbXz6OxZ9UZZpY144Fjk1sUKZKXSZOtaVKfmnNjWQk5pynk9OXBbqKVa" charset="UTF-8"></script><style>
 @import url("https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap");
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -20,9 +18,7 @@ html,body{
   background:#efefef;
 }
 
-.content{
-  padding:1px;
-}
+.content{padding:1px}
 
 .panel{
   background:#efefef;
@@ -37,9 +33,7 @@ h2{
   font-size:22px;
 }
 
-p{
-  line-height:1.45;
-}
+p{line-height:1.45}
 
 .gallery{
   display:grid;
@@ -51,6 +45,11 @@ p{
   background:#c0c0c0;
   border:2px outset #fff;
   padding:5px;
+  cursor:pointer;
+}
+
+.photo:active{
+  border-style:inset;
 }
 
 .photo img{
@@ -59,6 +58,11 @@ p{
   height:170px;
   object-fit:cover;
   background:#000;
+  transition:transform .12s ease;
+}
+
+.photo:hover img{
+  transform:scale(1.02);
 }
 
 .photo-name{
@@ -67,72 +71,144 @@ p{
   word-break:break-all;
 }
 
-.empty,
-.error{
+.empty,.error{
   font-size:13px;
   color:#666;
 }
 
+/* ОКНО ПРОСМОТРА */
+.lightbox{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.82);
+  z-index:9999;
+}
+
+.lightbox.open{
+  display:flex;
+}
+
+.lightbox-window{
+  width:min(96vw,1100px);
+  max-height:94vh;
+  background:#c0c0c0;
+  border:2px solid #fff;
+  box-shadow:4px 4px 0 #000,-2px -2px 0 #808080;
+  display:flex;
+  flex-direction:column;
+}
+
+.lightbox-titlebar{
+  min-height:30px;
+  padding:4px 7px;
+  color:#fff;
+  background:#000080;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.lightbox-title{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.lightbox-close{
+  width:20px;
+  height:20px;
+  flex:none;
+  background:#c0c0c0;
+  color:#000;
+  border:2px outset #fff;
+  text-align:center;
+  line-height:16px;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.lightbox-close:active{
+  border-style:inset;
+}
+
+.lightbox-body{
+  padding:10px;
+  background:#808080;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:auto;
+}
+
+.lightbox-body img{
+  display:block;
+  max-width:calc(96vw - 40px);
+  max-height:calc(94vh - 90px);
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  background:#000;
+}
+
 @media(max-width:650px){
-
-  html,body{
-    overflow-x:hidden;
-  }
-
-  .content{
-    padding:0;
-  }
-
-  .panel{
-    padding:10px;
-    margin-bottom:10px;
-  }
-
-  h2{
-    font-size:19px;
-  }
-
-  p{
-    font-size:14px;
-    line-height:1.5;
-  }
-
+  html,body{overflow-x:hidden}
+  .content{padding:0}
+  .panel{padding:10px;margin-bottom:10px}
+  h2{font-size:19px}
+  p{font-size:14px;line-height:1.5}
   .gallery{
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:7px;
   }
-
-  .photo img{
-    height:140px;
+  .photo img{height:140px}
+  .lightbox{padding:6px}
+  .lightbox-window{width:100%;max-height:98vh}
+  .lightbox-body img{
+    max-width:calc(100vw - 30px);
+    max-height:calc(98vh - 75px);
   }
 }
 </style>
 </head>
 
 <body>
-
 <main class="content">
 
 <section class="panel">
-
-  <h2>📷 Мои фото</h2>
+  <h2>Фото4ки<h2>
 
   <p>
-    мои крутые и не очень фотки.
+    Мои крутые и не очень фотографии.
   </p>
 
   <div id="gallery" class="gallery">
-    <div class="empty">
-      Загрузка фотографий...
-    </div>
+    <div class="empty">Загрузка фотографий...</div>
   </div>
-
 </section>
 
 </main>
 
-<script>
+<!-- Полноэкранный просмотр -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="lightbox-window" onclick="event.stopPropagation()">
+    <div class="lightbox-titlebar">
+      <span id="lightbox-title" class="lightbox-title">Фото</span>
+      <button class="lightbox-close" type="button" onclick="closeLightbox()">×</button>
+    </div>
 
+    <div class="lightbox-body">
+      <img id="lightbox-image" src="" alt="">
+    </div>
+  </div>
+</div>
+
+<script>
 const API_URL =
   "https://api.github.com/repos/turbodog335/turbodognet/contents/assets/photos";
 
@@ -142,103 +218,117 @@ const RAW_BASE =
 const IMAGE_EXTENSIONS =
   /\.(jpe?g|png|gif|webp|bmp|svg)$/i;
 
+const lightbox = document.getElementById("lightbox");
+const lightboxImage = document.getElementById("lightbox-image");
+const lightboxTitle = document.getElementById("lightbox-title");
 
 async function loadPhotos(){
-
-  const gallery =
-    document.getElementById("gallery");
+  const gallery=document.getElementById("gallery");
 
   try{
-
     const response =
       await fetch(API_URL,{cache:"no-store"});
 
     if(!response.ok){
-      throw new Error(
-        "GitHub API error: " +
-        response.status
-      );
+      throw new Error("GitHub API error: "+response.status);
     }
 
-    const files =
-      await response.json();
+    const files = await response.json();
 
-    const images =
-      files
-        .filter(file =>
-          file.type === "file" &&
-          IMAGE_EXTENSIONS.test(file.name)
+    const images = files
+      .filter(file =>
+        file.type === "file" &&
+        IMAGE_EXTENSIONS.test(file.name)
+      )
+      .sort((a,b) =>
+        a.name.localeCompare(
+          b.name,
+          undefined,
+          {numeric:true}
         )
-        .sort((a,b) =>
-          a.name.localeCompare(
-            b.name,
-            undefined,
-            {numeric:true}
-          )
-        );
+      );
 
-    gallery.innerHTML = "";
+    gallery.innerHTML="";
 
     if(!images.length){
-
       gallery.innerHTML =
-        '<div class="empty">' +
-        'Пока нет фотографий.' +
-        '</div>';
-
+        '<div class="empty">Пока нет фотографий.</div>';
       return;
     }
 
-
     for(const file of images){
+      const url =
+        RAW_BASE + encodeURIComponent(file.name);
 
       const card =
         document.createElement("div");
-
       card.className = "photo";
-
+      card.title = "Нажми, чтобы открыть";
+      card.tabIndex = 0;
 
       const img =
         document.createElement("img");
-
-      img.src =
-        RAW_BASE +
-        encodeURIComponent(file.name);
-
+      img.src = url;
       img.alt = file.name;
       img.loading = "lazy";
 
-
       const name =
         document.createElement("div");
-
-      name.className =
-        "photo-name";
-
-      name.textContent =
-        file.name;
-
+      name.className = "photo-name";
+      name.textContent = file.name;
 
       card.appendChild(img);
       card.appendChild(name);
-
       gallery.appendChild(card);
+
+      card.addEventListener("click", () => {
+        openLightbox(url, file.name);
+      });
+
+      card.addEventListener("keydown", (event) => {
+        if(event.key === "Enter" || event.key === " "){
+          event.preventDefault();
+          openLightbox(url, file.name);
+        }
+      });
     }
 
   }catch(error){
-
     console.error(error);
 
     gallery.innerHTML =
       '<div class="error">' +
-      'че то че то. ' +
-      'не грузит бля.' +
+      'Не удалось загрузить фотографии. ' +
+      'Проверь папку assets/photos/.' +
       '</div>';
   }
 }
 
-loadPhotos();
+function openLightbox(url,name){
+  lightboxImage.src = url;
+  lightboxImage.alt = name;
+  lightboxTitle.textContent = name;
+  lightbox.classList.add("open");
+  lightbox.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
 
+function closeLightbox(){
+  lightbox.classList.remove("open");
+  lightbox.setAttribute("aria-hidden","true");
+  lightboxImage.src = "";
+  document.body.style.overflow = "";
+}
+
+lightbox.addEventListener("click", closeLightbox);
+
+document.addEventListener("keydown", (event) => {
+  if(event.key === "Escape"){
+    closeLightbox();
+  }
+});
+
+loadPhotos();
 </script>
 
 </body>
