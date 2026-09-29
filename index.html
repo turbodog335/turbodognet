@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Сережааточкакок^_^</title>
 <link rel="icon" href="assets/favicon.svg">
-<style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=MZvXQ8SGZSiHJ8CzyaNzJO472N9HZlcxArsAuxE9DRw3sXz0IJatzu_NWGhM0nqEFSvYZyoAkhhas14mXfAMvkRfBjpo6bCVVU6P18ehNMhnG6VPgYTp9xgOhWaHYcXqR9QrdS3S7bJr5i929HO_YGDCTZBxB0paJn1z2BZQiSB_pttlK7DgRpGg0-gvsQn4abh6qKYT1sQ4SV87lYcfMAVvGWpUPwzcTPMGf6oouFWdTnS20PT04JgP7kZIM6XcZBZOo8NW8oXzFg3vHsZV0DRA7FdbQwbP7g8IfnFWXVXw3MbDmYH_jM6p8M6reo2C" charset="UTF-8"></script><style>
 @import url("https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap");
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:"MedievalSharp",cursive;color:#111}
@@ -52,6 +52,7 @@ a:hover{color:#ff00ff}
       <a href="home.html" data-page="home">Главная</a>
       <a href="about.html" data-page="about">About</a>
       <a href="music.html" data-page="music">Музыка</a>
+      <a href="photos.html" data-page="photos">Фото</a>
       <a href="games.html" data-page="games">Игры</a>
       <a href="links.html" data-page="links">Ссылки</a>
     </nav>
@@ -71,14 +72,20 @@ const titles={
   home:"turbodog335/turbosabaka335/turbodog335lox/emokitty335/сережадурдомик",
   about:"Инфа обо мне(если вам вдруг интересно)",
   music:"Моя музыка",
+  photos:"Мои фотки",
   games:"На что я просрал свою жизнь(;_;)",
   links:"Сошал линки"
 };
 const pages={
-  home:"home.html",about:"about.html",music:"music.html",games:"games.html",links:"links.html"
+  home:"home.html",
+  about:"about.html",
+  music:"music.html",
+  photos:"photos.html",
+  games:"games.html",
+  links:"links.html"
 };
 
-function navigate(name, push=true){
+function navigate(name,push=true){
   if(!pages[name]) name="home";
   document.getElementById("content-frame").src=pages[name];
   document.getElementById("page-titlebar").textContent=titles[name];
