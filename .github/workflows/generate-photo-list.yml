@@ -1,0 +1,80 @@
+name: Generate photo list
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-photo-list:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate photos.json
+        shell: python
+        run: |
+          import json
+          import re
+          from pathlib import Path
+
+          photos_dir = Path("assets/photos")
+          output = photos_dir / "photos.json"
+
+          extensions = {
+              ".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".avif"
+          }
+
+          photos = []
+
+          if photos_dir.exists():
+              for path in photos_dir.iterdir():
+                  if not path.is_file():
+                      continue
+
+                  if path.name.lower() in {"captions.txt", "photos.json"}:
+                      continue
+
+                  if path.suffix.lower() not in extensions:
+                      continue
+
+                  match = re.fullmatch(r"photo(\d+)", path.stem, re.IGNORECASE)
+                  number = int(match.group(1)) if match else None
+
+                  photos.append({
+                      "name": path.name,
+                      "src": f"assets/photos/{path.name}",
+                      "number": number
+                  })
+
+          photos.sort(key=lambda item: (
+              item["number"] is None,
+              item["number"] if item["number"] is not None else 0,
+              item["name"].lower()
+          ))
+
+          output.write_text(
+              json.dumps(photos, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8"
+          )
+
+      - name: Commit photos.json if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add assets/photos/photos.json
+
+          if git diff --cached --quiet; then
+            echo "photos.json is already up to date."
+            exit 0
+          fi
+
+          git commit -m "Update photo list"
+          git push
