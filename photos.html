@@ -174,7 +174,22 @@ p{line-height:1.45}
     max-height:calc(98vh - 75px);
   }
 }
-</style>
+
+        .photo-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .photo-caption {
+            color: #fff;
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -208,128 +223,118 @@ p{line-height:1.45}
   </div>
 </div>
 
+
+
+
 <script>
-const API_URL =
-  "https://api.github.com/repos/turbodog335/turbodognet/contents/assets/photos";
+        const gallery = document.querySelector(".gallery");
+        const photoPath = "assets/photos/photo";
+        const captionsPath = "assets/photos/captions.txt";
 
-const RAW_BASE =
-  "https://raw.githubusercontent.com/turbodog335/turbodognet/main/assets/photos/";
+        // Подписи хранятся отдельно в assets/photos/captions.txt.
+        // Формат: номер=подпись
+        // Например: 1=Фотка с поездки
+        let captions = {};
 
-const IMAGE_EXTENSIONS =
-  /\.(jpe?g|png|gif|webp|bmp|svg)$/i;
+        async function loadCaptions() {
+            try {
+                const response = await fetch(captionsPath + "?v=" + Date.now());
+                if (!response.ok) return;
 
-const lightbox = document.getElementById("lightbox");
-const lightboxImage = document.getElementById("lightbox-image");
-const lightboxTitle = document.getElementById("lightbox-title");
+                const text = await response.text();
 
-async function loadPhotos(){
-  const gallery=document.getElementById("gallery");
+                text.split(/\r?\n/).forEach(line => {
+                    line = line.trim();
 
-  try{
-    const response =
-      await fetch(API_URL,{cache:"no-store"});
+                    if (!line || line.startsWith("#")) return;
 
-    if(!response.ok){
-      throw new Error("GitHub API error: "+response.status);
-    }
+                    const separator = line.indexOf("=");
+                    if (separator === -1) return;
 
-    const files = await response.json();
+                    const number = line.slice(0, separator).trim();
+                    const caption = line.slice(separator + 1).trim();
 
-    const images = files
-      .filter(file =>
-        file.type === "file" &&
-        IMAGE_EXTENSIONS.test(file.name)
-      )
-      .sort((a,b) =>
-        a.name.localeCompare(
-          b.name,
-          undefined,
-          {numeric:true}
-        )
-      );
-
-    gallery.innerHTML="";
-
-    if(!images.length){
-      gallery.innerHTML =
-        '<div class="empty">Пока нет фотографий.</div>';
-      return;
-    }
-
-    for(const file of images){
-      const url =
-        RAW_BASE + encodeURIComponent(file.name);
-
-      const card =
-        document.createElement("div");
-      card.className = "photo";
-      card.title = "Нажми, чтобы открыть";
-      card.tabIndex = 0;
-
-      const img =
-        document.createElement("img");
-      img.src = url;
-      img.alt = file.name;
-      img.loading = "lazy";
-
-      const name =
-        document.createElement("div");
-      name.className = "photo-name";
-      name.textContent = file.name;
-
-      card.appendChild(img);
-      card.appendChild(name);
-      gallery.appendChild(card);
-
-      card.addEventListener("click", () => {
-        openLightbox(url, file.name);
-      });
-
-      card.addEventListener("keydown", (event) => {
-        if(event.key === "Enter" || event.key === " "){
-          event.preventDefault();
-          openLightbox(url, file.name);
+                    if (number) {
+                        captions[number] = caption;
+                    }
+                });
+            } catch (error) {
+                // Если файла с подписями нет, фотографии всё равно загрузятся.
+            }
         }
-      });
-    }
 
-  }catch(error){
-    console.error(error);
+        function loadPhotos() {
+            let photoNumber = 1;
+            const maxPhotos = 1000;
 
-    gallery.innerHTML =
-      '<div class="error">' +
-      'Не загрузилось бля. ' +
-      'бля какой я ебень,мб из-за впн и тд и тп.' +
-      '</div>';
-  }
-}
+            function tryNext() {
+                if (photoNumber > maxPhotos) return;
 
-function openLightbox(url,name){
-  lightboxImage.src = url;
-  lightboxImage.alt = name;
-  lightboxTitle.textContent = name;
-  lightbox.classList.add("open");
-  lightbox.setAttribute("aria-hidden","false");
-  document.body.style.overflow = "hidden";
-}
+                const number = photoNumber;
+                const item = document.createElement("div");
+                item.className = "photo-item";
 
-function closeLightbox(){
-  lightbox.classList.remove("open");
-  lightbox.setAttribute("aria-hidden","true");
-  lightboxImage.src = "";
-  document.body.style.overflow = "";
-}
+                const img = new Image();
 
-lightbox.addEventListener("click", closeLightbox);
+                img.onload = function () {
+                    img.alt = "Фото " + number;
+                    img.className = "gallery-photo";
+                    img.onclick = function () {
+                        openPhoto(img);
+                    };
 
-document.addEventListener("keydown", (event) => {
-  if(event.key === "Escape"){
-    closeLightbox();
-  }
-});
+                    item.appendChild(img);
 
-loadPhotos();
-</script>
+                    if (captions[number]) {
+                        const caption = document.createElement("div");
+                        caption.className = "photo-caption";
+                        caption.textContent = captions[number];
+                        item.appendChild(caption);
+                    }
 
+                    gallery.appendChild(item);
+
+                    photoNumber++;
+                    tryNext();
+                };
+
+                img.onerror = function () {
+                    return;
+                };
+
+                img.src = photoPath + number + ".jpg";
+            }
+
+            tryNext();
+        }
+
+        function openPhoto(photo) {
+            document.getElementById("bigPhoto").src = photo.src;
+            document.getElementById("popup").classList.add("show");
+        }
+
+        function closePhoto() {
+            document.getElementById("popup").classList.remove("show");
+        }
+
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                closePhoto();
+            }
+        });
+
+        document.getElementById("popup").addEventListener("click", function(event) {
+            if (event.target === this || event.target.classList.contains("close")) {
+                closePhoto();
+            }
+        });
+
+        async function startGallery() {
+            await loadCaptions();
+            loadPhotos();
+        }
+
+        startGallery();
+    </script>
 </body>
 </html>
