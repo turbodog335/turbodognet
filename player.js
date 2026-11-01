@@ -1,5 +1,6 @@
 (() => {
   const playlist = [
+    { title: "sexy shample ", artist: "emosl4t696", src: "assets/song67.mp3" },
     { title: "I don't Love ", artist: "Have a Nice Life", src: "assets/song01.mp3" },
     { title: "When the moon reaches for the stars", artist: "Azumi Takahashi", src: "assets/song0.mp3" },
     { title: "New kind of love", artist: "Frou Frou", src: "assets/song.mp3" },
